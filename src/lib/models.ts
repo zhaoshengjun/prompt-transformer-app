@@ -109,7 +109,7 @@ const modelsConfig = parseModelsConfig();
  * Strip private fields from a model to create a public-safe version
  */
 function stripPrivateFields(model: Model): PublicModel {
-  const {clientType, apiUrl, apiToken, headers, endpoints, ...publicFields} =
+  const {clientType: _, apiUrl: __, apiToken: ___, headers: ____, endpoints: _____, ...publicFields} =
     model;
   return publicFields;
 }

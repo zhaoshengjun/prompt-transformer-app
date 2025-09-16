@@ -4,21 +4,20 @@ import {
   TextGenerationOptions,
   ImageGenerationOptions,
   VideoGenerationOptions,
-  AIClient,
   CanGenerateImage,
   CanGenerateText,
   CanGenerateVideo,
 } from "./clients/base";
 import {getModelById} from "./models";
 
-const supportTextGeneration = (client: any): client is CanGenerateText => {
-  return "generateText" in client;
+const supportTextGeneration = (client: unknown): client is CanGenerateText => {
+  return client !== null && typeof client === "object" && "generateText" in client;
 };
-const supportImageGeneration = (client: any): client is CanGenerateImage => {
-  return "generateImage" in client;
+const supportImageGeneration = (client: unknown): client is CanGenerateImage => {
+  return client !== null && typeof client === "object" && "generateImage" in client;
 };
-const supportVideoGeneration = (client: any): client is CanGenerateVideo => {
-  return "generateVideo" in client;
+const supportVideoGeneration = (client: unknown): client is CanGenerateVideo => {
+  return client !== null && typeof client === "object" && "generateVideo" in client;
 };
 
 // High-level AI service that provides a clean interface for the application
@@ -205,7 +204,15 @@ export class AIService {
   }
 
   // Create enhancement prompt based on configuration
-  private createEnhancementPrompt(userPrompt: string, config: any): string {
+  private createEnhancementPrompt(userPrompt: string, config: {
+    useCase?: string;
+    tone?: string;
+    lighting?: string;
+    composition?: string;
+    colorTheme?: string;
+    imageStyle?: string;
+    aspectRatio?: string;
+  }): string {
     let enhancementPrompt = `Please enhance this image generation prompt: "${userPrompt}"\n\n`;
     enhancementPrompt += `Requirements:\n`;
 

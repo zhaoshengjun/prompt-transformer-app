@@ -1,19 +1,15 @@
 import {useState} from "react";
-import {useToast} from "@/hooks/use-toast";
 import {PromptConfig, ChatRequest} from "@/lib/types/api";
+import {toast} from "sonner";
 
 // TODO: could create a useAsync hook to save repeating this logic (also in useGenerateImage)
 export function useGenerateJSON() {
   const [isGenerating, setIsGenerating] = useState(false);
   const [generatedJSON, setGeneratedJSON] = useState<string>("");
-  const {toast} = useToast();
-
   const generateJSON = async (config: PromptConfig, chatModel: string) => {
     if (!config.prompt.trim()) {
-      toast({
-        title: "Error",
+      toast("Error", {
         description: "Please enter a prompt first.",
-        variant: "destructive",
       });
       return false;
     }
@@ -54,19 +50,16 @@ export function useGenerateJSON() {
 
       setGeneratedJSON(JSON.stringify(result.data, null, 2));
 
-      toast({
-        title: "Success",
+      toast("Success", {
         description: "JSON prompt generated successfully!",
       });
 
       return true;
     } catch (error) {
       console.error("Error generating JSON:", error);
-      toast({
-        title: "Error",
+      toast("Error", {
         description:
           error instanceof Error ? error.message : "Failed to generate JSON",
-        variant: "destructive",
       });
       return false;
     } finally {

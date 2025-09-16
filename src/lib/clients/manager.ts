@@ -5,7 +5,6 @@ import {
   AIClientConfigError,
 } from "./base";
 import {AzureOpenAIClient} from "./azure";
-import {AnthropicClient} from "./anthropic";
 import {getPrivateModelConfig} from "../models";
 import type {Model} from "../models";
 
@@ -56,9 +55,6 @@ export class ClientManager {
     switch (clientType) {
       case "azure-openai":
         return AzureOpenAIClient.getInstance(model);
-
-      case "anthropic":
-        return AnthropicClient.getInstance(model);
 
       default:
         throw new AIClientNotFoundError(clientType);

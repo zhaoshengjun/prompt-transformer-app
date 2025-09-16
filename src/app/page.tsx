@@ -16,8 +16,8 @@ import {Textarea} from "@/components/ui/textarea";
 import {useGenerateImage} from "@/hooks/use-generate-image";
 import {useGenerateJSON} from "@/hooks/use-generate-json";
 import {useChatModels, useImageModels} from "@/hooks/use-models";
-import {useToast} from "@/hooks/use-toast";
 import {PromptConfig} from "@/lib/types/api";
+import Image from "next/image";
 import {
   Camera,
   Copy,
@@ -28,6 +28,7 @@ import {
   Zap,
 } from "lucide-react";
 import {useState} from "react";
+import {toast} from "sonner";
 
 // Default config will be initialized with dynamic models
 function createDefaultConfig(): PromptConfig {
@@ -50,7 +51,6 @@ function createDefaultConfig(): PromptConfig {
 export default function PromptTransformer() {
   const chatModels = useChatModels();
   const imageModels = useImageModels();
-  const {toast} = useToast();
   const {
     isGenerating,
     generatedJSON,
@@ -78,8 +78,7 @@ export default function PromptTransformer() {
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(generatedJSON);
-    toast({
-      title: "Copied",
+    toast("Copied", {
       description: "JSON copied to clipboard!",
     });
   };
@@ -95,8 +94,7 @@ export default function PromptTransformer() {
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
 
-    toast({
-      title: "Downloaded",
+    toast("Downloaded", {
       description: "JSON file downloaded successfully!",
     });
   };
@@ -497,7 +495,7 @@ export default function PromptTransformer() {
                   <Sparkles className="h-12 w-12 mx-auto mb-4 opacity-50" />
                   <p>Generated JSON will appear here</p>
                   <p className="text-sm mt-2">
-                    Enter a prompt and click "Generate JSON" to get started
+                    Enter a prompt and click &quot;Generate JSON&quot; to get started
                   </p>
                 </div>
               )}
@@ -516,9 +514,11 @@ export default function PromptTransformer() {
               {generatedImage ? (
                 <div className="space-y-4">
                   <div className="relative">
-                    <img
+                    <Image
                       src={generatedImage}
                       alt="Generated image"
+                      width={800}
+                      height={400}
                       className="w-full h-auto rounded-lg max-h-[400px] object-contain"
                     />
                     <Badge
