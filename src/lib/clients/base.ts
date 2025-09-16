@@ -36,7 +36,7 @@ export interface VideoGenerationOptions {
   model?: string;
 }
 
-export interface AIResponse<T = any> {
+export interface AIResponse<T = unknown> {
   success: boolean;
   data?: T;
   error?: string;
@@ -81,7 +81,7 @@ export class AIClientError extends Error {
   constructor(
     message: string,
     public clientType: ClientType,
-    public originalError?: any
+    public originalError?: unknown
   ) {
     super(message);
     this.name = "AIClientError";
