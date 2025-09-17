@@ -39,7 +39,11 @@ async function fetchModels(): Promise<void> {
         );
       }
       const endpoint = `${baseUrl.replace(/\/$/, "")}/api/model`;
-      const response = await fetch(endpoint);
+      const response = await fetch(endpoint, {
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+        },
+      });
       if (!response.ok) {
         throw new Error(`Failed to fetch models: ${response.status}`);
       }
