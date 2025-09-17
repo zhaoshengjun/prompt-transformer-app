@@ -18,23 +18,24 @@ export function useGenerateJSON() {
 
     try {
       const requestBody: ChatRequest = {
-        prompt: config.prompt,
-        systemInstructions: config.systemInstructions,
-        model: chatModel,
-        parameters: {
-          useCase: config.useCase,
-          tone: config.tone,
-          lighting: config.lighting,
-          composition: config.composition,
-          colorTheme: config.colorTheme,
-          colorGrade: config.colorGrade,
-          imageStyle: config.imageStyle,
-          effects: config.effects,
-          aspectRatio: config.aspectRatio,
+        model_id: chatModel,
+        text_prompt: config.prompt,
+        extra_config: {
+          system_prompt: config.systemInstructions,
         },
       };
 
-      const response = await fetch("/api/chat", {
+      const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || ""; // must be public for Next.js client usage
+      if (!baseUrl) {
+        throw new Error(
+          "Missing NEXT_PUBLIC_API_BASE_URL environment variable. Please set it in your .env.local file."
+        );
+      }
+
+      // Ensure no double slashes when concatenating
+      const endpoint = `${baseUrl.replace(/\/$/, "")}/api/chat`;
+
+      const response = await fetch(endpoint, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
