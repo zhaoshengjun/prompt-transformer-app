@@ -1,7 +1,7 @@
 "use client";
 
+import {PublicModel} from "@/lib/types/api";
 import {useEffect, useState} from "react";
-import {type PublicModel} from "@/lib/models";
 
 interface UseModelsReturn {
   allModels: PublicModel[];
@@ -19,7 +19,7 @@ let fetchPromise: Promise<void> | null = null;
 const listeners = new Set<() => void>();
 
 function notifyListeners() {
-  listeners.forEach(listener => listener());
+  listeners.forEach((listener) => listener());
 }
 
 async function fetchModels(): Promise<void> {
@@ -32,8 +32,14 @@ async function fetchModels(): Promise<void> {
       globalLoading = true;
       globalError = null;
       notifyListeners();
-
-      const response = await fetch('/api/models');
+      const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "";
+      if (!baseUrl) {
+        throw new Error(
+          "Missing NEXT_PUBLIC_API_BASE_URL environment variable. Please set it in your .env.local file."
+        );
+      }
+      const endpoint = `${baseUrl.replace(/\/$/, "")}/api/model`;
+      const response = await fetch(endpoint);
       if (!response.ok) {
         throw new Error(`Failed to fetch models: ${response.status}`);
       }
@@ -42,7 +48,8 @@ async function fetchModels(): Promise<void> {
       globalModels = data.models || [];
       globalError = null;
     } catch (err) {
-      globalError = err instanceof Error ? err.message : 'Failed to load models';
+      globalError =
+        err instanceof Error ? err.message : "Failed to load models";
       globalModels = [];
     } finally {
       globalLoading = false;
