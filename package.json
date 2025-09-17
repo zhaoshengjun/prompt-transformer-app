@@ -9,7 +9,7 @@
     "lint": "eslint"
   },
   "engines": {
-    "node": "22.x"
+    "node": "20"
   },
   "dependencies": {
     "@radix-ui/react-label": "^2.1.7",
